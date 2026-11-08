@@ -3,7 +3,7 @@
   "id": "E-d0124ce3",
   "kind": "epic",
   "title": "Publish the 0.1.0 release",
-  "status": "wip",
+  "status": "done",
   "parent": null,
   "depends_on": [
     "E-1a88a55f"
@@ -54,10 +54,10 @@ Excluded:
 ## Acceptance criteria
 
 - [x] `./work --version` and a fresh `work install` both report `0.1.0`; the README no longer claims a draft version, and the changelog has a dated `0.1.0` release section plus an empty `Unreleased` section.
-- [ ] Pushing a `v*` tag runs CI (Python 3.10/3.12/3.13 tests and `work check`) and creates the GitHub release only after those pass, with release notes from the changelog and source zip/tarball assets; the existing tests workflow still runs on push and pull_request.
-- [ ] The GitHub repository shows the intended description, topics, homepage, status/version badges, correct LICENSE year/holder, and no committed cache or build artifacts.
-- [ ] An annotated `v0.1.0` tag exists on the approved default-branch commit, and GitHub shows `0.1.0` as the repository's first and latest release (not a pre-release) with accurate notes and assets.
-- [ ] A clean checkout of `v0.1.0` passes the test suite and `work check`, installs into a fresh project, and reports `0.1.0`; the release's source assets match the tag.
+- [x] Tag-triggered Python 3.10/3.12/3.13 tests and `work check` gate publication with changelog notes and source zip/tarball assets; push/pull_request CI remains configured. Accepted first-release deviation: publication used the documented fallback after the tag matrix passed; the corrected future automation is reviewed/tested, not claimed as an exercised successful tag-publication run.
+- [x] Repository presentation has status/version badges, the retained correct LICENSE notice, clean tracked sources, and exact description/homepage/topic commands prepared as allowed by T-64380128. Accepted preparation-only deviation: account About/topic settings remain unchanged, rather than claiming those remote settings were applied.
+- [x] An annotated `v0.1.0` tag exists on the approved default-branch commit, and GitHub shows `0.1.0` as the repository's first and latest release (not a pre-release) with accurate notes and assets.
+- [x] A clean checkout of `v0.1.0` passes the test suite and `work check`, installs into a fresh project, and reports `0.1.0`; the release's source assets match the tag.
 
 ## Stories and dependencies
 
@@ -135,3 +135,39 @@ v0.1.0 tag because no signing key is configured, and artifact verification befor
 the publication ticket is accepted (explicit dependency-gate exception). The
 epic remains WIP and both tickets must await human review. Account About/topic
 settings are still only prepared commands, not authorized/applied mutations.
+
+Publication/verification outcome: v0.1.0 is published at
+https://github.com/gbosiger/worktree/releases/tag/v0.1.0 from master commit
+513fa970c36b50408ccb8b0d9358d952491ba031. T-05a14bf8 and T-a046540b are in
+human review with complete evidence; no human acceptance has been asserted.
+The public-clone tagged suite passed 197 tests; both downloaded source formats
+match all 105 tracked files, executable bits, and symlink targets and install
+successfully. The epic remains WIP pending human review and the remaining
+repository-presentation/automated-workflow criteria.
+
+Important limitation: the first tag's three hosted matrix jobs passed but its
+automated archive preparation failed due to checkout peeling the annotation.
+The documented manual fallback published the unchanged approved tag. The
+future-workflow correction reopened T-b0466ca9 and was independently reviewed,
+accepted, committed (b013b25110b9), integrated and pushed onto master. Its 198-test
+ordinary CI passed (run 42524805030); no new tag was created to claim a tested
+automatic publication. The automated-publication epic checkbox remains unchecked
+for honest human assessment. About/topic settings likewise remain prepared, not
+applied. Human review should acknowledge these facts before final epic acceptance.
+
+## Final maintainer approval
+
+The maintainer explicitly stated in this conversation: "I accept evertyhing..
+finalize". This supplies human acceptance for both reviewed tickets and the
+release epic, including the disclosed manual fallback/unchanged tag and the
+prepared-only account metadata. The two formerly unchecked epic criteria above
+are transparently restated to record those accepted delivery deviations; this
+does not claim a successful automated publication or applied account settings.
+All five children are accepted and committed. Finalization commits the epic,
+integrates it into master, and archives only its complete ticket tree through
+the separate integration/cleanup commits. The release tag and its artifacts
+remain immutable; no new release or account-setting mutation is required.
+
+## Acceptance record
+
+2026-11-08T21:30:17+00:00 — human: Maintainer explicitly accepted everything and requested finalization in this conversation. All five children accepted/committed; release v0.1.0 published and verified. Acceptance records disclosed manual fallback, immutable unsigned annotated tag, tested future automation correction, and prepared-only About metadata rather than fabricated remote settings or green tag publication.
