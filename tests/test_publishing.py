@@ -100,6 +100,23 @@ class PublishingTests(unittest.TestCase):
             self.assertFalse((Path(self.temp.name) / str(index)).exists())
             self.git('tag', '-d', 'v0.1.0')
 
+    def test_restore_annotated_tag_after_checkout_peels_local_ref(self):
+        self.tag()
+        runner = Path(self.temp.name) / 'runner'
+        subprocess.run(['git', 'clone', '--no-hardlinks', str(self.root), str(runner)],
+                       check=True, capture_output=True)
+        commit = self.git('rev-parse', 'HEAD')
+        subprocess.run(['git', '-C', str(runner), 'update-ref', 'refs/tags/v0.1.0', commit],
+                       check=True)
+        with self.assertRaisesRegex(ValueError, 'annotated'):
+            release.prepare(runner, 'v0.1.0', Path(self.temp.name) / 'before')
+        subprocess.run(['bash', str(SCRIPTS / 'restore-release-tag.sh'), 'v0.1.0'],
+                       cwd=runner, check=True, capture_output=True)
+        release.prepare(runner, 'v0.1.0', Path(self.temp.name) / 'after')
+        self.assertEqual(self.git('cat-file', '-t', 'refs/tags/v0.1.0'), 'tag')
+        self.assertEqual(subprocess.check_output(
+            ['git', '-C', str(runner), 'rev-parse', 'HEAD']).decode().strip(), commit)
+
     @unittest.skipUnless(shutil.which('unzip'), 'Unix unzip required for ZIP smoke test')
     def test_real_toolkit_installs_from_both_source_formats_without_history(self):
         for name in ('work', 'AGENTS.md', 'CONVENTION.md', 'LICENSE'):

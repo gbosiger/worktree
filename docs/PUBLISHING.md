@@ -80,6 +80,10 @@ branch commit/workflow is already published before pushing the tag.
 `.github/workflows/release.yml` tests the exact tag on Python 3.10/3.12/3.13 and
 validates the board with full history. Only after all pass does the release job
 prepare notes and versioned source archives and smoke-test both formats. It
+restores the annotated tag object from origin after checkout (which can otherwise
+replace the local tag ref with its peeled commit); preparation still requires
+the restored tag to match the exact tested HEAD. This fetch changes only the
+ephemeral runner's local ref, never the published tag. It
 creates a draft, uploads assets, then publishes as latest/non-prerelease. Reruns
 update the same release and replace only the two generated assets. Validation
 has read-only permissions; only the release job has `contents: write`, using

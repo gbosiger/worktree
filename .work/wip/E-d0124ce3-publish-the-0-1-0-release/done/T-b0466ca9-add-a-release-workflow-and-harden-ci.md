@@ -69,6 +69,31 @@ settings change was performed; those remain publication-ticket evidence.
 `docs/PUBLISHING.md` contains approval gates, exact tag and fallback commands,
 partial-epic integration guidance, and source-archive/history limitations.
 
+## Hosted follow-up correction (2026-11-08)
+
+Reopened after the first real tag run
+https://github.com/gbosiger/worktree/actions/runs/42523884001 passed all three
+Python test/board jobs but failed preparation: checkout populated the runner's
+tag ref with the peeled commit rather than its annotated tag object. No release
+was created by that failed run. The published tag remains immutable at 513fa970c36b50408ccb8b0d9358d952491ba031.
+
+The release job now explicitly fetches only the selected remote tag back into
+the ephemeral local runner ref before preparation. It never pushes or alters a
+remote tag; annotation/version/exact-HEAD checks remain mandatory. A new offline
+regression simulates checkout peeling, proves preparation rejects it, then proves
+the restored annotation passes without moving HEAD. Documentation explains the
+fetch. The existing v0.1.0 uses the already documented manual fallback after its
+successful hosted validation, rather than retagging it to include this correction.
+
+Independent review `ses_e42fb6e79ffepZlqQnNsVFgcT0` approved with no blocking
+findings. Six focused publishing tests, actionlint on both workflows, and the full
+198-test suite passed (150.023s, Python 3.14.8). The future-workflow fix has not
+been exercised on a new publication tag; no such tag is created for testing.
+
 ## Acceptance record
 
 2026-11-08T20:12:07+00:00 — agent: Independent review ses_e43389517ffewug9m7LdExVrc2 approved; 197 tests passed, actionlint passed both workflows, bash syntax checks passed, board valid. Archive installation and gh retry verified offline; hosted publication reserved for T-05a14bf8.
+
+## Acceptance record
+
+2026-11-08T21:18:56+00:00 — agent: Re-reviewed actual correction by ses_e42fb6e79ffepZlqQnNsVFgcT0: scoped local tag restoration preserves annotation and exact HEAD guard. 198 tests passed including peeled-ref regression; actionlint passed. Original v0.1.0 unchanged; manual fallback after successful hosted matrix.
