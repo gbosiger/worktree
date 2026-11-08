@@ -3,13 +3,13 @@
   "id": "T-05a14bf8",
   "kind": "task",
   "title": "Tag v0.1.0 and publish the first GitHub release",
-  "status": "backlog",
+  "status": "wip",
   "parent": "E-d0124ce3",
   "depends_on": [
     "T-516bff53",
     "T-b0466ca9"
   ],
-  "implementer": "human",
+  "implementer": "agent",
   "reviewer": "human",
   "branch": null,
   "base_branch": null
@@ -45,5 +45,15 @@ hash and any signing/verification output.
 
 ## Handoff
 
-The human publishes; the agent may prepare the exact commands and notes, but only
-an explicit maintainer instruction authorizes the push and the release.
+The maintainer explicitly authorized agent publication on 2026-11-08 (selected
+"Publish and verify"), including integration onto master, necessary master/tag
+pushes, and an unsigned annotated tag because no signing key is configured.
+The version is 0.1.0 and the prepared changelog date matches today's UTC date.
+Human review/acceptance is retained; the agent must not accept on their behalf.
+
+Pre-publication checks: authenticated as gbosiger with repository/workflow access;
+GitHub default branch is master, public repository gbosiger/worktree; no existing
+releases or v0.1.0 tag. Remote master matched local master e9c6e3f8a4f1b59072d858c80bb59c377b2f138f.
+The only initial dirty changes were the maintainer's implementer assignments for
+these two tickets; they are preserved. Preparation previously passed 197 tests,
+board validation, actionlint, and both artifact-format installation smoke tests.

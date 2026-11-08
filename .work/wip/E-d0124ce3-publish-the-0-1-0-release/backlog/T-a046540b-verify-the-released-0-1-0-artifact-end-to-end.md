@@ -8,7 +8,7 @@
   "depends_on": [
     "T-05a14bf8"
   ],
-  "implementer": "human",
+  "implementer": "agent",
   "reviewer": "human",
   "branch": null,
   "base_branch": null

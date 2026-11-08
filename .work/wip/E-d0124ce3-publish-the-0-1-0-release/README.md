@@ -118,7 +118,7 @@ separately. The final local suite passed 197 tests; both source formats were
 installed and their fresh boards checked. Hosted Python-matrix execution is not
 claimed. GitHub's releases API still returned no releases on 2026-11-08.
 
-Remaining gates are real publication/final verification, not a routine agent
+At the end of local preparation, remaining gates were publication/final verification, not a routine agent
 review pause: separately authorize integrating these preparation commits onto
 master and publishing its approved exact commit, confirm version/date/signing,
 then execute T-05a14bf8 and verify the actual release in T-a046540b. Both stay
@@ -126,3 +126,12 @@ backlog/human-owned; the epic stays WIP until all release evidence exists.
 About/topic edits are prepared but not applied. `docs/PUBLISHING.md` gives the
 exact sequence, including why a partially complete release epic must not be
 falsely accepted to satisfy `work merge`.
+
+Follow-up authorization (2026-11-08): the maintainer reassigned both remaining
+tickets to implementer `agent`, retaining human review, and explicitly selected
+"Publish and verify". This authorizes integrating preparation onto master,
+necessary master/tag pushes and GitHub release publication, an unsigned annotated
+v0.1.0 tag because no signing key is configured, and artifact verification before
+the publication ticket is accepted (explicit dependency-gate exception). The
+epic remains WIP and both tickets must await human review. Account About/topic
+settings are still only prepared commands, not authorized/applied mutations.
