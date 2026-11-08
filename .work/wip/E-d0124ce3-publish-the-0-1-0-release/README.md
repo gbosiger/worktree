@@ -3,15 +3,15 @@
   "id": "E-d0124ce3",
   "kind": "epic",
   "title": "Publish the 0.1.0 release",
-  "status": "backlog",
+  "status": "wip",
   "parent": null,
   "depends_on": [
     "E-1a88a55f"
   ],
   "implementer": "agent",
   "reviewer": "human",
-  "branch": null,
-  "base_branch": null
+  "branch": "feature/E-d0124ce3-release-0.1.0",
+  "base_branch": "master"
 }
 ---
 # Publish the 0.1.0 release
@@ -100,8 +100,14 @@ ordering; the list above is guidance.
 
 ## Verification and handoff
 
-Prepared in backlog only. No version change, tag, push, merge, or release is made
-by this preparation. Next action after E-1a88a55f closes: implementer starts the
-three parallel tasks, then tags and publishes (task 4), then verifies (task 5).
-The human maintains final authority over publication and the first-release
-version decision.
+Execution authorized by the maintainer on 2026-11-08: prepare the 0.1.0 release,
+perform agent-capable reviews and completion, and commit between tickets without
+publication. The maintainer explicitly authorized creating the recorded release
+branch from master. The three local preparation tasks use agent review under
+that instruction; publication and final released-artifact acceptance remain
+human-owned. The clean starting checkout had no unrelated edits.
+
+The requested 0.1.0 epic establishes the intended version normalization for
+local preparation. Confirm the final version/date and approved default-branch
+commit before tagging. No tag, push, merge, release, or account-setting mutation
+is implied by local preparation.

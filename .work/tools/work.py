@@ -16,7 +16,7 @@ import sys
 import tempfile
 import uuid
 
-VERSION = '0.2.0'
+VERSION = '0.1.0'
 TOOLKIT = Path(__file__).resolve().parents[2]
 STATES = ('backlog', 'wip', 'review', 'implemented', 'done')
 COMPLETED = ('implemented', 'done')

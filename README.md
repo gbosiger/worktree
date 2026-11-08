@@ -112,4 +112,4 @@ python3 -m unittest discover -s tests -v
 This checkout already has a `.work/` board. See [contributing](CONTRIBUTING.md),
 [publishing](docs/PUBLISHING.md), and the [changelog](CHANGELOG.md).
 
-Draft v0.2.0. Project name is provisional. [MIT licensed](LICENSE).
+Version 0.1.0. [MIT licensed](LICENSE).
