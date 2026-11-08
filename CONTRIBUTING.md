@@ -9,6 +9,18 @@ Add regression tests for meaningful file mutations, validation, installation, an
 lifecycle behavior. Run the test suite and dogfood board validation. Do not commit
 cache files, local lock directories, generated archives, or secrets.
 
+Development requires Python 3.10+ and Git on a Unix-like system; the toolkit and
+unit tests use only the Python standard library. From a full-history checkout:
+
+```sh
+python3 -m unittest discover -s tests -v
+./work --root . check
+```
+
+Use a full clone rather than a history-free source archive to validate the
+development board's archived dependencies. Release automation and explicit
+publication gates are documented in [publishing](docs/PUBLISHING.md).
+
 Use `./work --help` for commands. Read only relevant references from the
 CONVENTION.md index. Keep historical changes in CHANGELOG.md, not ordinary
 skill context. Describe the supported first-release contract rather than

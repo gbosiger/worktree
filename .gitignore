@@ -1,4 +1,11 @@
 __pycache__/
 *.py[cod]
 *.zip
+*.tar.gz
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
 .work/.lock/

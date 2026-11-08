@@ -4,6 +4,29 @@ The public repository is [gbosiger/worktree](https://github.com/gbosiger/worktre
 with default branch `master`. Publishing is an explicit maintainer action; local
 preparation never creates a repository, pushes, or changes account settings.
 
+## Repository presentation
+
+The README links its CI badge and version badge to this repository. The version
+badge describes the prepared source version, not an assertion that a release has
+already been published. Keep it in sync when preparing future releases.
+
+After reviewing the target account/repository, the maintainer can apply these
+optional About settings (these commands mutate GitHub; preparation does not run
+them):
+
+```sh
+gh repo edit gbosiger/worktree \
+  --description 'Editable Markdown work tickets with explicit human-agent review and Git-native history.' \
+  --homepage 'https://github.com/gbosiger/worktree#readme' \
+  --add-topic 'markdown,git,cli,python,developer-tools,task-management,ai-agents'
+```
+
+The MIT license retains `2026 Worktree Tickets contributors`, matching the
+project's first year and contributor ownership notice. Issue/PR templates,
+SECURITY.md, dependency bots, and other automation are deliberately deferred as
+optional: none is required for this small first release. Contributors can use
+GitHub issues/PRs and the instructions in CONTRIBUTING.md.
+
 ## Prepare and approve
 
 1. Review the intended version in `.work/tools/work.py`, README, and CHANGELOG.

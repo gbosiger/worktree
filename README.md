@@ -1,5 +1,8 @@
 # Worktree Tickets
 
+[![Tests](https://github.com/gbosiger/worktree/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/gbosiger/worktree/actions/workflows/tests.yml)
+[![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/gbosiger/worktree/releases)
+
 A minimalistic approach to structured work: **epics, stories, and tasks as
 editable Markdown in your repository**, with explicit human–agent handoffs.
 No service, database, or third-party Python dependencies.
@@ -25,6 +28,9 @@ work --help
 If setup reports that its directory is not on PATH, add it to your shell's PATH.
 You can also use `./work` directly, without setup. See
 [installation](docs/INSTALLATION.md) for details and updates.
+For release source archives, prefer the Unix tarball; see
+[source-asset installation](docs/PUBLISHING.md#install-from-a-source-asset) for
+extraction and Git-history limitations.
 
 ## Use in your project
 

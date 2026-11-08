@@ -53,7 +53,7 @@ Excluded:
 
 ## Acceptance criteria
 
-- [ ] `./work --version` and a fresh `work install` both report `0.1.0`; the README no longer claims a draft version, and the changelog has a dated `0.1.0` release section plus an empty `Unreleased` section.
+- [x] `./work --version` and a fresh `work install` both report `0.1.0`; the README no longer claims a draft version, and the changelog has a dated `0.1.0` release section plus an empty `Unreleased` section.
 - [ ] Pushing a `v*` tag runs CI (Python 3.10/3.12/3.13 tests and `work check`) and creates the GitHub release only after those pass, with release notes from the changelog and source zip/tarball assets; the existing tests workflow still runs on push and pull_request.
 - [ ] The GitHub repository shows the intended description, topics, homepage, status/version badges, correct LICENSE year/holder, and no committed cache or build artifacts.
 - [ ] An annotated `v0.1.0` tag exists on the approved default-branch commit, and GitHub shows `0.1.0` as the repository's first and latest release (not a pre-release) with accurate notes and assets.
@@ -111,3 +111,18 @@ The requested 0.1.0 epic establishes the intended version normalization for
 local preparation. Confirm the final version/date and approved default-branch
 commit before tagging. No tag, push, merge, release, or account-setting mutation
 is implied by local preparation.
+
+Local preparation outcome: T-516bff53, T-b0466ca9, and T-64380128 have independent
+approval and passing verification. Each task records its evidence and is committed
+separately. The final local suite passed 197 tests; both source formats were
+installed and their fresh boards checked. Hosted Python-matrix execution is not
+claimed. GitHub's releases API still returned no releases on 2026-11-08.
+
+Remaining gates are real publication/final verification, not a routine agent
+review pause: separately authorize integrating these preparation commits onto
+master and publishing its approved exact commit, confirm version/date/signing,
+then execute T-05a14bf8 and verify the actual release in T-a046540b. Both stay
+backlog/human-owned; the epic stays WIP until all release evidence exists.
+About/topic edits are prepared but not applied. `docs/PUBLISHING.md` gives the
+exact sequence, including why a partially complete release epic must not be
+falsely accepted to satisfy `work merge`.
