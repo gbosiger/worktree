@@ -10,8 +10,9 @@ lifecycle behavior. Run the test suite and dogfood board validation. Do not comm
 cache files, local lock directories, generated archives, or secrets.
 
 Use `./work --help` for commands. Read only relevant references from the
-CONVENTION.md index. Historical changes belong in CHANGELOG.md and upgrade
-instructions in docs/MIGRATIONS.md, not ordinary skill context.
+CONVENTION.md index. Keep historical changes in CHANGELOG.md, not ordinary
+skill context. Describe the supported first-release contract rather than
+requiring users to follow prototype migration steps.
 
 Use the .work board for substantial changes. Commit messages retain the item ID.
 Bug reports and public contributions may also use GitHub issues/PRs; maintainers

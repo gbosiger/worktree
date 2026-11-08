@@ -6,7 +6,7 @@
   "status": "backlog",
   "parent": null,
   "depends_on": [
-    "E-0182afb4"
+    "E-1a88a55f"
   ],
   "implementer": "agent",
   "reviewer": "human",
@@ -65,14 +65,14 @@ Excluded:
 
 ## Stories and dependencies
 
-Depends on E-0182afb4 (Archive completed tickets in Git commits). Reuse its
+Depends on E-1a88a55f (the initial toolkit, including local commit archiving). Reuse its
 machine-readable records, identity resolution, dependency handling, and reopening
 instead of creating a second incompatible archive format. This epic adds remote
-PR/review/cleanup orchestration; E-0182afb4 remains local and does not push.
+PR/review/cleanup orchestration; the local archive command does not push.
 
 Backlog tasks:
 
-1. T-8818c75d — Define GitHub operation and publication contract (after E-0182afb4).
+1. T-8818c75d — Define GitHub operation and publication contract (after E-1a88a55f).
 2. T-dc9a8fcd — Create and update scoped ticket pull requests.
 3. T-266c67e6 — Recheck epic readiness and merge gates.
 4. T-e769d578 — Publish archive records and prepare safe PR cleanup.
@@ -112,7 +112,7 @@ Scenarios to cover:
 | --- | --- |
 | Done task, epic still has backlog | Task may merge; epic remains blocked. |
 | Empty epic backlog, unfinished review/WIP | Epic remains blocked. |
-| Done file already archived by E-0182afb4 | Resolve its record; do not archive/delete it twice. |
+| Done file already archived by E-1a88a55f's local workflow | Resolve its record; do not archive/delete it twice. |
 | Draft opened, then all work accepted | Recheck current state, mark ready, and recheck again before merge. |
 | Work added/reopened or PR head changes after readiness | Stale evidence is invalid; recompute gates/reviews. |
 | Cleanup commit changes the reviewed head | Rerun required checks/reviews; do not bypass protections. |

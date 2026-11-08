@@ -30,7 +30,7 @@ branch, with recoverable and idempotent GitHub archive comments.
 
 ## Approach and decisions
 
-Reuse the E-0182afb4 codec/history lookup and safety contract. This task prepares
+Reuse the E-1a88a55f local archive codec/history lookup and safety contract. This task prepares
 cleanup; it does not merge or claim GitHub comments replace local Git durability.
 
 ## Verification

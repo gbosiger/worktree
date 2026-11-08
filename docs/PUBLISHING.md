@@ -50,6 +50,7 @@ git diff -- AGENTS.md
 git status --short
 ```
 
-Review then commit .workkit/, .work/, .agents/skills/, and the AGENTS.md addition.
+Review then commit .workkit/, .work/, .agents/skills/, .opencode/commands/, and
+the AGENTS.md addition.
 The first release uses explicit reviewed updates, not a network bootstrap script
 or automatic downloads. Keep each project's own tickets in its own repository.

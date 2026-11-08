@@ -42,8 +42,8 @@ Excluded:
 - A replacement ticket format, database, service, or mandatory editor dependency
   for toolkit users; changing existing lifecycle or acceptance rules.
 - Git/PR automation, an AI chat integration, and automatic acceptance or commits.
-- Implementing archive/history lookup from E-0182afb4; support the current
-  file-backed board and document the future integration boundary.
+- Implementing archive/history lookup from E-1a88a55f; consume the toolkit's
+  implemented lookup behavior and document any unavailable integration boundary.
 
 ## Acceptance criteria
 
@@ -74,7 +74,9 @@ Supporting tasks:
 Design precedes discovery; completion, tree, actions, and Telescope depend on
 discovery and can then progress independently. End-to-end verification follows
 all four.
-No external epic is a prerequisite; E-0182afb4 is related future archive work.
+No external epic is a metadata prerequisite. Local archive work belongs to
+E-1a88a55f; the maintainer's current plan is to close that initial-toolkit epic
+before moving on to this integration.
 
 ## Decisions and open questions
 

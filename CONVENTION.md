@@ -12,5 +12,5 @@ This is a reference index. Read only what the current operation needs:
 - [Git](docs/GIT.md): branches, commit messages, and branch-local limitations.
 - [Installation](docs/INSTALLATION.md): command setup and adoption in other projects.
 
-Historical material is separate: [migrations](docs/MIGRATIONS.md) and
-[changelog](CHANGELOG.md). Skills should not load these during ordinary work.
+The [changelog](CHANGELOG.md) summarizes development. It is not required context
+for ordinary ticket work.

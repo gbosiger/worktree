@@ -55,7 +55,7 @@ class WorkflowTests(unittest.TestCase):
         original = work.records(self.root)[story][2]
         self.finish(epic)
         items = work.records(self.root)
-        self.assertIn('/done/', str(items[story][0]))
+        self.assertIn('/implemented/', str(items[story][0]))
         self.assertEqual(original, items[story][2])
         self.run_work('reopen', story)
         items = work.records(self.root)
@@ -91,7 +91,7 @@ class WorkflowTests(unittest.TestCase):
                 self.run_work('assign', identity, '--implementer', 'agent', '--reviewer', 'human')
                 for command, state in (('start', 'wip'), ('review', 'review'),
                                        ('start', 'wip'), ('review', 'review'),
-                                       ('done', 'done'), ('reopen', 'backlog')):
+                                       ('done', 'implemented'), ('reopen', 'backlog')):
                     extra = ('--by', 'human', '--evidence', 'Reviewed') if command == 'done' else ()
                     before = {p: p.read_bytes() for p in (self.root / '.work').rglob('*.md')}
                     self.run_work(command, identity, *extra, '--dry-run')
@@ -104,7 +104,7 @@ class WorkflowTests(unittest.TestCase):
                     self.assertEqual(new_meta['custom'], 'preserved')
                     self.assertIn('# Example', new_body)
                     self.assertIn(str(new_path.relative_to(self.root)), self.run_work('show', identity))
-                    self.assertIn(identity, self.run_work('list', '--status', state))
+                    self.assertIn(identity, self.run_work('list', '--all', '--status', state))
                     self.assertEqual(work.records(self.root)[epic][1]['status'], 'backlog')
                     self.run_work('check')
                     path = new_path
@@ -135,7 +135,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(items[story][0].parent, items[epic][0].parent / 'backlog')
         self.run_work('check')
 
-    def test_check_rejects_legacy_child_layout_and_status_mismatch(self):
+    def test_check_rejects_flat_child_layout_and_status_mismatch(self):
         epic = self.create('epic')
         story = self.create('story', parent=epic)
         path, meta, body = work.records(self.root)[story]
@@ -143,7 +143,7 @@ class WorkflowTests(unittest.TestCase):
         path.rename(legacy)
         error = self.run_work('check', ok=False)
         self.assertIn('disagree', error)
-        self.assertIn('migration', error)
+        self.assertIn('docs/FORMAT.md', error)
         legacy.rename(path)
         work.write(path, dict(meta, status='wip'), body)
         self.assertIn('disagree', self.run_work('check', ok=False))
@@ -190,6 +190,46 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(work.records(self.root)[story][0].parent, epic_dir / 'wip')
         self.run_work('check')
 
+    def test_status_placeholders_exist_at_board_group_and_epic_levels(self):
+        group = self.create('group', 'Delivery')
+        epic = self.create('epic', 'Grouped feature', group)
+        standalone = self.create('epic', 'Standalone feature')
+        items = work.records(self.root)
+        containers = [self.root / '.work', *(items[i][0].parent for i in (group, epic, standalone))]
+        self.assertIn('implemented', work.STATES)
+        for container in containers:
+            for state in work.STATES:
+                with self.subTest(container=container, state=state):
+                    self.assertEqual((container / state / '.gitkeep').read_bytes(), b'')
+
+    def test_repository_status_placeholder_migration_is_complete(self):
+        containers = [SOURCE / '.work']
+        containers += [path.parent for path, meta, _ in work.records(SOURCE).values()
+                       if meta['kind'] in ('group', 'epic')]
+        for container in containers:
+            for state in work.STATES:
+                with self.subTest(container=container, state=state):
+                    self.assertEqual((container / state / '.gitkeep').read_bytes(), b'')
+
+    def test_git_preserves_empty_implemented_folders_at_every_level(self):
+        group = self.create('group', 'Delivery')
+        epic = self.create('epic', 'Feature', group)
+        items = work.records(self.root)
+        containers = [self.root / '.work', items[group][0].parent, items[epic][0].parent]
+        commands = [('init', '-b', 'main'), ('add', '.work'),
+                    ('-c', 'user.name=Placeholder Test', '-c', 'user.email=placeholder@example.invalid',
+                     '-c', 'commit.gpgsign=false', '-c', 'core.hooksPath=/dev/null',
+                     'commit', '-m', 'Preserve board layout')]
+        for args in commands:
+            result = subprocess.run(['git', '-C', str(self.root), *args], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+        result = subprocess.run(['git', '-C', str(self.root), 'ls-tree', '-r', '--name-only', 'HEAD'],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        tracked = set(result.stdout.splitlines())
+        for container in containers:
+            self.assertIn((container / 'implemented/.gitkeep').relative_to(self.root).as_posix(), tracked)
+
     def test_repository_skills_link_to_canonical_sources(self):
         for skill in (SOURCE / 'skills').iterdir():
             with self.subTest(skill=skill.name):
@@ -201,11 +241,11 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(len(list((SOURCE / '.agents' / 'skills').glob('*/SKILL.md'))), 3)
 
     def test_opencode_commands_have_canonical_links_and_safe_templates(self):
-        expected = {'work', 'work-group', 'work-epic', 'work-story', 'work-task',
-                    'work-list', 'work-show', 'work-check', 'work-start',
-                    'work-review', 'work-done', 'work-reopen', 'work-assign', 'work-depend'}
+        expected = {'work-group', 'work-epic', 'work-story', 'work-task'}
         commands = list((SOURCE / 'commands').glob('*.md'))
         self.assertEqual({p.stem for p in commands}, expected)
+        self.assertEqual({p.name for p in (SOURCE / '.opencode/commands').iterdir()},
+                         {f'{name}.md' for name in expected})
         for command in commands:
             with self.subTest(command=command.name):
                 link = SOURCE / '.opencode' / 'commands' / command.name
@@ -220,8 +260,6 @@ class WorkflowTests(unittest.TestCase):
                 self.assertIn('$ARGUMENTS', body)
                 self.assertNotIn('!`', text)
         self.assertIn('work-prepare', (SOURCE / 'commands' / 'work-task.md').read_text())
-        self.assertIn('work-execute', (SOURCE / 'commands' / 'work-start.md').read_text())
-        self.assertIn('never invent', (SOURCE / 'commands' / 'work-done.md').read_text())
 
     def test_executable_launcher_and_command_setup(self):
         unrelated = self.root / 'no-board'
@@ -261,6 +299,12 @@ class WorkflowTests(unittest.TestCase):
         epic = self.create('epic', 'Tooling coexists with tickets')
         self.assertEqual(set(work.records(self.root)), {epic})
 
+    def test_ci_uses_current_launcher_and_complete_ticket_history(self):
+        workflow = (SOURCE / '.github/workflows/tests.yml').read_text()
+        self.assertIn('fetch-depth: 0', workflow)
+        self.assertIn('- run: ./work --root . check', workflow)
+        self.assertNotIn('python work.py', workflow)
+
     def test_setup_refuses_existing_commands_and_dangling_links(self):
         bin_dir = self.root / 'bin'
         bin_dir.mkdir()
@@ -284,6 +328,98 @@ class WorkflowTests(unittest.TestCase):
                 self.assertTrue((SOURCE / 'docs' / f'{reference}.md').is_file())
             self.assertNotIn('Read `.workkit/CONVENTION.md`', text)
             self.assertIn('Do not preload', text)
+
+    def test_first_release_guidance_uses_only_current_format(self):
+        maintained = [*SOURCE.glob('*.md'), *(SOURCE / 'docs').glob('*.md'),
+                      *(SOURCE / 'skills').glob('*/SKILL.md')]
+        for path in maintained:
+            with self.subTest(path=str(path.relative_to(SOURCE))):
+                text = path.read_text()
+                self.assertNotIn('MIGRATIONS.md', text)
+                self.assertNotIn('encode_archive', text)
+                self.assertNotIn('decode_archive', text)
+                self.assertNotIn('v1/v2 archives remain readable', text)
+        format_text = (SOURCE / 'docs/FORMAT.md').read_text()
+        self.assertNotIn('## Legacy', format_text)
+        self.assertNotIn('Worktree-Tickets-Archive:', format_text)
+        self.assertIn('file-history archive', format_text)
+        self.assertFalse((SOURCE / 'docs/MIGRATIONS.md').exists())
+
+    def test_skills_require_execution_context_before_edits(self):
+        execute = (SOURCE / 'skills/work-execute/SKILL.md').read_text()
+        commit = (SOURCE / 'skills/work-commit/SKILL.md').read_text()
+        prepare = (SOURCE / 'skills/work-prepare/SKILL.md').read_text()
+        # Prompt-contract checks, not proof that an agent obeyed the instructions.
+        for text in (execute, commit):
+            for required in ('./work preflight ID', 'another epic\'s', 'docs/GIT.md'):
+                self.assertIn(required, text)
+            self.assertNotIn('git branch --show-current', text)
+            self.assertNotIn('git worktree list', text)
+        self.assertLess(execute.index('## Execution preflight'),
+                        execute.index('## Execution and handoff'))
+        for required in ('before any ticket or deliverable edits',
+                         'documentation/design tasks', 'outermost-first',
+                         'do not start siblings', 'requested dry run',
+                         'not an automatic cascade', 'actual branch/worktree',
+                         'stop further ticket execution'):
+            self.assertIn(required, execute)
+        self.assertIn('branch/worktree preflight before any execution edits/status changes', prepare)
+        self.assertIn('not a preparation loophole', prepare)
+        self.assertIn('Do not make a ticket-linked commit on the wrong branch', commit)
+
+    def test_workflow_requires_review_pause_even_with_agent_roles(self):
+        execute = (SOURCE / 'skills/work-execute/SKILL.md').read_text()
+        lifecycle = (SOURCE / 'docs/LIFECYCLE.md').read_text()
+        # This protects the written workflow; the CLI does not enforce the pause.
+        for required in ('stop by default, even when both implementer and',
+                         'reviewer are `agent`', 'Wait for an explicit review request',
+                         'Role assignment is not review authorization',
+                         'implementation -> review -> completion',
+                         'can switch models/sessions', 'actual\n   diff, ticket'):
+            self.assertIn(required, execute)
+        self.assertIn('both implementer and reviewer are `agent`', lifecycle)
+        self.assertIn('not a new metadata field or CLI-enforced approval', lifecycle)
+
+    def test_fresh_install_has_only_ticket_creation_commands(self):
+        target = self.root / 'fresh project'
+        target.mkdir()
+        self.run_work('install', str(target))
+        expected = {'work-group.md', 'work-epic.md', 'work-story.md', 'work-task.md'}
+        canonical = target / '.workkit/commands'
+        links = target / '.opencode/commands'
+        self.assertEqual({p.name for p in canonical.iterdir()}, expected)
+        self.assertEqual({p.name for p in links.iterdir()}, expected)
+        for link in links.iterdir():
+            self.assertTrue(link.is_symlink())
+            self.assertFalse(link.readlink().is_absolute())
+            self.assertTrue(link.samefile(canonical / link.name))
+
+    def test_explicit_ancestor_start_sequence_preserves_siblings(self):
+        group = self.create('group', 'Delivery')
+        epic = self.create('epic', 'Selected epic', group)
+        other_epic = self.create('epic', 'Other epic', group)
+        task = self.create('task', 'Selected task', epic)
+        sibling = self.create('task', 'Unselected task', epic)
+        other_task = self.create('task', 'Other epic task', other_epic)
+        before = {p: p.read_bytes() for p in (self.root / '.work').rglob('*.md')}
+        for identity in (group, epic, task):
+            self.run_work('start', identity, '--dry-run')
+        self.assertEqual(before, {p: p.read_bytes() for p in (self.root / '.work').rglob('*.md')})
+        for identity in (group, epic, task):
+            self.run_work('start', identity)
+            current_path = work.records(self.root)[identity][0]
+            self.assertIn(str(current_path.relative_to(self.root)), self.run_work('show', identity))
+        items = work.records(self.root)
+        for identity in (group, epic, task):
+            self.assertEqual(items[identity][1]['status'], 'wip')
+        for identity in (other_epic, sibling, other_task):
+            self.assertEqual(items[identity][1]['status'], 'backlog')
+        self.run_work('review', task)
+        items = work.records(self.root)
+        self.assertEqual(items[task][1]['status'], 'review')
+        for identity in (group, epic):
+            self.assertEqual(items[identity][1]['status'], 'wip')
+        self.run_work('check')
 
     def test_completion_requires_criteria_evidence_and_reviewer(self):
         epic = self.create('epic')
@@ -411,8 +547,9 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(len(list((target / '.agents' / 'skills').glob('*/SKILL.md'))), 3)
         self.assertTrue((target / '.workkit' / 'LICENSE').exists())
         self.assertEqual((target / '.workkit' / 'VERSION').read_text().strip(), work.VERSION)
-        for reference in ('FORMAT', 'AUTHORING', 'LIFECYCLE', 'GIT', 'INSTALLATION', 'MIGRATIONS'):
+        for reference in ('FORMAT', 'AUTHORING', 'LIFECYCLE', 'GIT', 'INSTALLATION'):
             self.assertTrue((target / '.workkit' / 'docs' / f'{reference}.md').is_file())
+        self.assertFalse((target / '.workkit' / 'docs/MIGRATIONS.md').exists())
         self.assertTrue((target / '.workkit' / 'CHANGELOG.md').is_file())
         installed = target / '.workkit' / '.work' / 'tools' / 'work.py'
         self.assertTrue(installed.is_file())

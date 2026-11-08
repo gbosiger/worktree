@@ -5,7 +5,7 @@
   "title": "Define GitHub operation and publication contract",
   "status": "backlog",
   "parent": "E-54e9139e",
-  "depends_on": ["E-0182afb4"],
+  "depends_on": ["E-1a88a55f"],
   "implementer": "agent",
   "reviewer": "human",
   "branch": null,
@@ -26,7 +26,7 @@ Keep GitHub optional; this preparation does not authorize any publication.
 - [ ] Define managed section/comment markers, source revision attribution, AGENT labels, comment location, idempotency keys, and full-record size handling without truncation.
 - [ ] Resolve supported squash/merge-queue/auto-merge policies, required checks, cleanup/reapproval sequencing, and how archive-preserving messages are enforced or unsupported operations blocked.
 - [ ] Define public-content/secret review and a recoverable prohibited-content failure path before publication, without promising automatic secret detection.
-- [ ] Record approved decisions and remaining blockers in focused docs, reusing E-0182afb4 records rather than inventing a second format.
+- [ ] Record approved decisions and remaining blockers in focused docs, reusing E-1a88a55f's local archive records rather than inventing a second format.
 
 ## Approach and decisions
 

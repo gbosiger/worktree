@@ -1,16 +1,14 @@
 # OpenCode shortcuts
 
-Project-local slash commands turn short requests into ticket actions. They use
-the existing skills and CLI, not a separate board or a second set of rules.
+Project-local slash commands prepare ticket files with descriptions, scope, and
+acceptance criteria. They use the existing skills and CLI, not a separate board
+or a second set of rules. Board queries and lifecycle actions belong in the
+terminal, not LLM prompt wrappers.
 
 ```text
 /work-epic Add search by title
 /work-task E-a1b2c3d4 Cover empty search results; implementer agent, reviewer human
 /work-story E-a1b2c3d4 Search titles without case sensitivity
-/work-list review
-/work-show T-1234abcd
-/work-start T-1234abcd
-/work-review T-1234abcd
 ```
 
 Use real IDs from your board. A missing parent, ambiguous target, or unspecified
@@ -21,32 +19,52 @@ backlog ticket; it does not also start implementation.
 
 | Command | Purpose |
 | --- | --- |
-| `/work REQUEST` | General ticket request, including explicit implementation requests |
 | `/work-group DESCRIPTION` | Create a group for a larger outcome |
 | `/work-epic DESCRIPTION` | Create a feature epic |
 | `/work-story EPIC_ID DESCRIPTION` | Create a behavioral story |
 | `/work-task EPIC_ID DESCRIPTION` | Create a supporting task |
-| `/work-list [STATUS]` | List tickets, optionally filtered |
-| `/work-show ID` | Locate and summarize a ticket |
-| `/work-check` | Validate without automatically repairing |
-| `/work-start ID` | Start selected work, without implementing it |
-| `/work-review ID` | Review actual work and prepare its handoff |
-| `/work-done ID ACCEPTANCE_AND_EVIDENCE` | Record explicit reviewer acceptance |
-| `/work-reopen ID` | Reopen while honoring dependencies/ancestors |
-| `/work-assign ID IMPLEMENTER REVIEWER` | Set agreed roles |
-| `/work-depend ID PREREQUISITE_ID` | Add a dependency; request removal explicitly |
 
 These are natural-language prompt shortcuts, not a second strict argument parser.
 You can append role choices, constraints, or `dry run`. Lifecycle gates still
 apply: shortcuts never auto-check acceptance criteria or impersonate a human
-reviewer. `/work-review` does not itself grant human acceptance. Git commits,
-branch switches, and publication require separate explicit authorization.
-The planned archive CLI is still unavailable.
+reviewer. Git commits, branch switches, and publication require separate explicit
+authorization.
+Archive and integration remain terminal-only CLI verbs — `work commit` and
+`work merge` — with no slash shortcut; see [Git workflow](GIT.md).
+
+## Terminal workflows
+
+Run these directly in the toolkit checkout; in installed projects replace
+`./work` with `./.workkit/work`, or use `work` after PATH setup.
+
+| Workflow | Terminal command |
+| --- | --- |
+| Find implementation candidates | `./work list --ready` (current branch's epic) |
+| Find review work | `./work list --status review` (current branch's epic) |
+| Resume work | `./work list --status wip` |
+| Inspect another epic's backlog | `./work list --epic EPIC_ID` |
+| List the whole live board | `./work list --all` (optionally `--status review`) |
+| Show a ticket | `./work show ID` |
+| Validate the board | `./work check` |
+| Start selected work | `./work start ID` |
+| Hand off into review | `./work review ID` |
+| Record reviewer acceptance | `./work done ID --by REVIEWER --evidence "Verification evidence"` |
+| Reopen work | `./work reopen ID` |
+| Assign roles | `./work assign ID --implementer agent --reviewer human` |
+| Add a dependency | `./work depend ID PREREQUISITE_ID` |
+| Remove a dependency | `./work depend ID PREREQUISITE_ID --remove` |
+
+These commands change status or metadata, not implementation or review quality.
+Ask the agent in ordinary chat to implement or review a ticket using
+`work-execute`; a status transition alone does not perform that work. The
+general dispatcher and lifecycle/query slash commands are no longer supplied,
+including the review shortcut. Existing lifecycle and acceptance gates still
+apply; see [Lifecycle](LIFECYCLE.md).
 
 ## Installation and source of truth
 
 `work install PROJECT` includes these commands. In installed projects,
-`.opencode/commands/work-*.md` and `work.md` are relative links to canonical
+the four `.opencode/commands/work-*.md` files are relative links to canonical
 templates under `.workkit/commands/`. In this toolkit checkout they link to
 `commands/`. Commit both the canonical templates and links. Moving/cloning the
 repository keeps them valid without a global configuration change.

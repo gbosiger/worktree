@@ -70,12 +70,10 @@ project's own `.work/`, not the shared toolkit repository.
 Updates are explicit reviewed changes: compare upstream with the installed
 runtime and local customizations, then replace selected toolkit/skill files in
 a normal project commit. VERSION identifies the copied release. Never replace
-the project's `.work/` or overwrite its `AGENTS.md`. Consult
-[migrations](MIGRATIONS.md) only when upgrading an older layout.
-
-For older installations with duplicate skill directories, follow the
-[skill-link migration](MIGRATIONS.md#duplicate-skill-copies-to-canonical-links).
-The installer refuses conflicts rather than deleting custom skills.
+the project's `.work/` or overwrite its `AGENTS.md`. Keep runtime, skills,
+commands, and docs at a consistent reviewed revision. The installer refuses
+conflicts rather than deleting custom skills; there is no automatic conversion
+of existing boards or installations.
 
 Copying is the default so ordinary clones contain everything. Git subtree or
 submodules are optional, not necessary. Multi-file installation is not

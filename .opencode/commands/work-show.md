@@ -1,1 +1,0 @@
-../../commands/work-show.md
