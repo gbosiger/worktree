@@ -37,48 +37,18 @@ Do not preload the convention index, unrelated references, or changelog.
 - Report the resulting commit and checks. Never fabricate review, test, or merge
   evidence, and never publish without the user's authorization.
 
-## Commit accepted work, retain records until integration
+## Commit or integrate accepted work
 
-- Use `work commit [ID ...]` (toolkit: `./work`; installed: `./.workkit/work`)
-  only for accepted `implemented` tickets. This is a Git action requiring explicit
-  authorization, not part of acceptance. `work done` queues accepted work in
-  implemented; `work commit` moves it to done without deleting it.
-- Inspect staged changes first: the command commits ALL already-staged changes
-  plus selected ticket moves to done. Stage only authorized work; never stage the whole
-  board indiscriminately to bypass its unstaged-board guard.
-- Without IDs it selects all eligible implemented tickets for the current branch;
-  prefer explicit IDs for a bounded request. Containers include eligible queued
-  descendants and retain already-done children, never implicit acceptance. An unset
-  ticket branch uses the current branch, not the epic's branch.
-- Preview with `work commit ID --dry-run`. A short subject (`feat:` for
-  groups/epics/stories, `task:` for tasks) and one Markdown ID/title list replace
-  embedded ticket payloads. Use `-m` only when an override is wanted. Exact
-  accepted records stay in the feature's done folders. They are not selected again
-  in later commit messages; never delete them during ordinary feature commits.
-- Use `work merge ID` when explicitly authorized to integrate a fully approved,
-  committed epic or group into its recorded local base. Both use an isolated/clean
-  target worktree and leave the source unchanged. See docs/GIT.md's policy table:
-  epic-to-WIP-group uses an explicit two-parent merge and retains done records;
-  final-base integration squashes, then automatically commits separate cleanup.
-  Do not accept unfinished containers to make merge proceed or clean up an
-  intermediate group. Child integration does not accept its parent.
-- Final integration and cleanup must remain two separate base commits. Never squash
-  them together. Previously archived descendants are materialized recursively;
-  lookup uses committed file history, not message payloads or markers.
-  Before final group integration, ensure the accepted epic revisions have landed.
-  Follow-up epic work requires reopening, re-approval, a new commit, and a WIP group;
-  preserve sibling lifecycle state instead of restoring stale board copies.
-- A failed merge/hook leaves its target worktree and journal for recovery. Resolve
-  staged conflicts there, then use `work merge ID --recover`; never redo a
-  successful integration or reset away its preserved tickets. Preview with
-  `work merge ID --dry-run` before integration when useful. Existing standalone
-  epic journals remain supported; do not delete an unfamiliar journal to retry.
-- Never add `--push` without explicit publication authorization. It targets the
-  configured upstream only. A failed push after local success is not a failed
-  commit: report the OID and retry publication separately, not archival.
-- For interrupted ticket commits, inspect the journal and use `work commit --recover` alone.
-  Resolve a stale lock only after checking no command is running. Do not remove
-  the journal or overwrite changed files/index to force recovery. Report any
-  ambiguity for manual resolution; no automatic duplicate commit or ref rewind.
-- After implementation, hand off into review per work-execute; neither archive
-  availability nor a user's commit request authorizes acceptance or publication.
+- Preview the selected IDs with `work commit ID --dry-run`. The command includes
+  **all staged changes** and moves selected implemented tickets to retained done
+  records. With no IDs it selects the eligible branch queue. Inspect the staged
+  diff and the preview paths before committing.
+- For an authorized integration, use the policy table in `docs/GIT.md` and
+  preview with `work merge ID --dry-run`. A child epic lands on its WIP group
+  with records retained. Final integration preserves the complete ticket tree
+  in the base commit before a separate cleanup commit.
+- For an interrupted commit use the recovery instructions in `docs/GIT.md`
+  and `work commit --recover`. For an interrupted integration use the saved
+  target worktree and `work merge ID --recover`. Preserve the journal and
+  concurrent edits. After a successful local commit and failed authorized push,
+  report the commit and retry publication separately.

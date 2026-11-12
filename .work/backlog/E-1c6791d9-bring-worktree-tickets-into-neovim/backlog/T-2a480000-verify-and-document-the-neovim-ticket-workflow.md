@@ -14,32 +14,16 @@
 ---
 # Verify and document the Neovim ticket workflow
 
-## Purpose and scope
+Give a Neovim user a tested setup guide and a walkthrough they can repeat.
 
-Verify the integrated editor experience and provide reproducible installation,
-configuration, troubleshooting, and a short end-to-end demo guide.
+## Scope
+
+Start from the implemented plugin and its supported-version decisions. Produce a setup guide for both installation layouts and run the workflow with a real editor as well as fixtures. Record the tested versions and which optional integrations were present so another maintainer can reproduce failures.
 
 ## Acceptance criteria
 
-- [ ] Automated coverage spans discovery, completion insertion, tree refresh, and safe CLI actions using temporary boards and supported headless Neovim tooling.
-- [ ] A manual smoke-test record names actual Neovim, completion framework, and Neo-tree versions and covers finding a title, inserting its ID, opening/editing, advancing, and observing refresh.
-- [ ] Record the tested Telescope version and demonstrate list filtered to review → fuzzy search → preview → open Markdown → done without an ID, with reviewer/evidence prompts and a rejected-gate example. Verify explicit target overrides, cancellation, moved-result lookup, and operation without Telescope.
-- [ ] Include separate worktrees, optional groups, external file moves, unsaved buffers, absent integrations/toolkit, malformed metadata, and failed lifecycle gates in the verification matrix.
-- [ ] Publish setup examples for toolkit and installed projects, optional integrations, mappings/commands, text-only display, refresh/troubleshooting, and explicit archive limitations.
-- [ ] Run the Python regression suite and board check; record evidence and remaining limitations without inventing reviewer acceptance.
+- [ ] The guide identifies tested versions and covers both checkout and installed setups.
+- [ ] A recorded walkthrough shows completion, tree navigation, picker selection, and a successful and rejected action.
+- [ ] The reviewer can find the headless results and any manual checks still outstanding.
 
-## Approach and decisions
-
-Verify the epic criteria against the implemented contract. Keep documentation in
-maintained project docs rather than embedding the only setup guide in this ticket.
-
-## Verification
-
-Run the plugin's documented tests, `python3 -m unittest discover -s tests -v`,
-and `./work --root . check`, then record the real integration smoke-test results.
-
-## Handoff
-
-Link docs and test evidence; identify unresolved defects and request epic review
-only when observable criteria are satisfied. Do not mark acceptance on behalf of
-an unset reviewer.
+Requirements: [Verification](../../../../docs/requirements/neovim.md#verification).

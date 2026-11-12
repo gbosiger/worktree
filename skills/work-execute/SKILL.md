@@ -64,8 +64,7 @@ documentation/design tasks. A read-only question or board listing is not executi
 1. Establish implementer/reviewer only if unset, after preflight. Follow the agreed
    roles and authorization without repeated confirmation. Never claim someone
    reviewed work without evidence from them.
-2. Confirm scope/criteria are actionable and dependencies complete. Write a short
-   approach before coding. Before deliverable edits, start backlog ancestors
+2. Confirm scope/criteria are actionable and dependencies complete. Record a decision in the ticket if it changes how to proceed. Before deliverable edits, start backlog ancestors
    outermost-first (group, then epic), then start the selected ticket. Leave
    already-WIP ancestors unchanged; do not start siblings or all children.
    Re-resolve paths with `show ID` after each container move. Dry-run the planned
@@ -85,14 +84,18 @@ documentation/design tasks. A read-only question or board listing is not executi
    implementation -> review -> completion cycle for the selected work; an
    implementation request, `reviewer: agent`, or generic "continue" is not that
    authorization. Honor narrower instructions to stop at review.
-   Provide a concise summary and a specific next action. Include
+   Before pausing mid-work or handing off, update `## Handoff` in the ticket.
+   Record the result, paths or commands, actual checks, gaps, and next actor/action.
+   Replace stale directions. A new session must be able to resume from the
+   repository without a chat transcript or a temporary handoff file. Include
    actual branch/worktree, selected and ancestor statuses, and any branch/setup
    blocker, not just the child ticket's status. Keep active ancestors in WIP;
    child review/completion does not accept or finish their parent. Stop
    dependent work when the chosen reviewer must act. Do not impersonate a human
    acceptance record. Reviewer identity in metadata is a convention, not security.
-5. When reviewing, compare actual changes against scope and criteria; record
-   findings and return to WIP when needed. Complete only with legitimate reviewer
+5. When reviewing completed work, inspect the change and try the acceptance examples.
+   Record each blocking finding in the ticket with its location, observed result,
+   and expected behavior. Return it to WIP when a fix is needed. Complete only with legitimate reviewer
    evidence and all children accepted. A resumed reviewer must read the actual
    diff, ticket, and verification evidence rather than treating the implementer's
    handoff or model change as proof of correctness. Changing models does not

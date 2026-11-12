@@ -1,27 +1,12 @@
 # {{title}}
 
-## Outcome and value
+Who faces what problem today? Describe what they will be able to accomplish when this feature ships and why it matters.
 
-Who benefits, what becomes possible, and why it matters.
+## Scope and delivery
 
-## Scope
-
-Included:
-
-Excluded:
+Describe the user journey this epic covers and where it ends. Identify the first useful increment and how later work builds on it. Name any unresolved choice that changes the scope.
 
 ## Acceptance criteria
 
-- [ ] Replace with observable feature behavior, including important failure cases.
-
-## Stories and dependencies
-
-List child IDs and any ordering constraints. Parentage is scope; dependencies are explicit IDs.
-
-## Decisions and open questions
-
-Record decisions that change the work. Link durable design documentation.
-
-## Verification and handoff
-
-Evidence, remaining risks, and the next action for the implementer or reviewer.
+- [ ] Describe a demonstration of the whole outcome from the beneficiary's perspective.
+- [ ] Describe an important constraint the complete feature must satisfy.

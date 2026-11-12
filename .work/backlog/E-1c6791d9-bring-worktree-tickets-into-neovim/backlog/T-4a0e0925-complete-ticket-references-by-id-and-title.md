@@ -14,28 +14,16 @@
 ---
 # Complete ticket references by ID and title
 
-## Purpose and scope
+Let a writer insert a ticket reference by typing part of its title or ID.
 
-Make references discoverable at the cursor instead of requiring remembered IDs.
+## Scope
+
+Use the shared live-ticket model in the chosen completion adapter. In a buffer containing two tickets with the same title, the writer must be able to distinguish them by ID and preview. Check that accepting a suggestion in the middle of a sentence preserves the words on both sides.
 
 ## Acceptance criteria
 
-- [ ] Implement the chosen completion adapter(s) for documented reference contexts and plugin command ID arguments, plus explicit invocation elsewhere.
-- [ ] Match ID fragments and title words with deterministic ranking; show ID, title, kind, and status, with parent and acceptance context in preview.
-- [ ] Accepting replaces only the reference fragment with the immutable ID, preserving surrounding text and cursor behavior.
-- [ ] Parent/dependency prompts filter invalid kinds/self references where known; ordinary prose reference completion remains unrestricted by lifecycle eligibility.
-- [ ] Tests cover empty/no-match results, duplicate titles, all ticket kinds, buffer-local worktree selection, refresh after moves, and missing optional adapter behavior.
+- [ ] Suggestions show enough context to distinguish identical titles.
+- [ ] Choosing a result inserts only its ID and preserves surrounding prose.
+- [ ] A parent prompt offers valid parent kinds.
 
-## Approach and decisions
-
-Use the shared model and selected framework APIs. Avoid noisy unsolicited
-completion in arbitrary prose; document precisely where automatic triggers apply.
-
-## Verification
-
-Add adapter tests and a real supported-framework smoke test for typing a title,
-previewing a candidate, and inserting an ID without damaging adjacent Markdown.
-
-## Handoff
-
-Record supported versions, trigger contexts, setup, and test evidence.
+Requirements: [Reference completion](../../../../docs/requirements/neovim.md#reference-completion).

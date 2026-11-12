@@ -14,29 +14,16 @@
 ---
 # Browse the ticket board as a Neo-tree source
 
-## Purpose and scope
+Let users browse the board by status inside Neo-tree.
 
-Add an optional ticket-board source switchable alongside Neo-tree filesystem and
-Git sources, using the agreed cockpit layout.
+## Scope
+
+Build the optional tree source on the shared board model. Exercise it with a group containing epics whose children have different statuses. A reviewer should be able to expand the group, find a child by title, and follow the same selection after its path changes.
 
 ## Acceptance criteria
 
-- [ ] Render status lanes, optional groups, epics, and child status lanes with stories/tasks; define empty-board and empty-lane presentation.
-- [ ] Provide keyboard navigation, title/ID search or filtering, preview, open Markdown, and copy ID; labels remain intelligible without icons or color.
-- [ ] Refresh preserves expansion/selection by ID where possible, follows moved nodes, and handles removal of the selected ticket without errors.
-- [ ] Source setup coexists with existing Neo-tree sources/mappings; missing Neo-tree does not prevent completion or standalone commands from loading.
-- [ ] Tests and a real Neo-tree smoke test cover nested groups, mixed child statuses, duplicate titles, external moves, filtering, and narrow windows.
+- [ ] A keyboard user can find a child ticket, preview it, open it, and copy its ID.
+- [ ] The tree follows a moved ticket and stays usable when it is removed.
+- [ ] Status and kind remain readable without color or icons.
 
-## Approach and decisions
-
-Use Neo-tree's supported source API and the shared board model. Keep lifecycle
-logic out of the renderer; action bindings can be added by T-a8238487.
-
-## Verification
-
-Compare the working source with the approved sketch and record the tested
-Neo-tree version and navigation/refresh evidence.
-
-## Handoff
-
-Document source registration, mapping configuration, and action extension points.
+Requirements: [Tree navigation](../../../../docs/requirements/neovim.md#tree-navigation).

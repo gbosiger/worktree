@@ -2,7 +2,7 @@
 {
   "id": "T-266c67e6",
   "kind": "task",
-  "title": "Recheck epic readiness and merge gates",
+  "title": "Explain what blocks an epic pull request",
   "status": "backlog",
   "parent": "E-54e9139e",
   "depends_on": ["T-dc9a8fcd"],
@@ -12,31 +12,18 @@
   "base_branch": null
 }
 ---
-# Recheck epic readiness and merge gates
+# Explain what blocks an epic pull request
 
-## Purpose and scope
+Tell a maintainer whether the selected epic PR can leave draft and what still blocks it.
 
-Provide explicit idempotent draft-to-ready promotion and reusable gates for the
-current PR head. Readiness is neither ticket acceptance nor merge authorization.
+## Scope
+
+Use the PR’s current revision and the selected epic’s board state. For a draft whose last backlog item moved to review, report the unfinished review. Once ready, adding a new child or changing the PR revision requires another check before merge.
 
 ## Acceptance criteria
 
-- [ ] Epic readiness checks that epic's backlog plus all unfinished children, dependencies, and explicit acceptance; unrelated repository backlog does not block it.
-- [ ] Accepted done task batches remain eligible while other epic work is unfinished; existing ticket acceptance gates are not weakened.
-- [ ] Required GitHub checks/reviews and the current PR head are evaluated with actionable blocked reasons; promoting a draft never merges it.
-- [ ] Repeated readiness is safe, and added/reopened work, changed heads, or cleanup commits invalidate stale evidence; merge callers can recompute the same gates immediately before merging.
-- [ ] Preview is read-only. Tests cover empty backlog with WIP/review children, unmet dependencies/acceptance, already-ready PRs, changed heads, and unrelated backlog.
+- [ ] Unfinished children block the epic. Unrelated backlog does not.
+- [ ] Reopening work or changing the PR head invalidates the earlier readiness result.
+- [ ] Repeating the check is safe and never merges the PR.
 
-## Approach and decisions
-
-Keep gate evaluation reusable by T-5dae58cb. Do not treat an AGENT-labelled
-comment or the PR author's advisory self-review as independent approval.
-
-## Verification
-
-Test local lifecycle fixtures and mocked GitHub state transitions, including
-checks/reviews invalidated by a new head. Run the unit suite.
-
-## Handoff
-
-Provide gate diagnostics and current-head test evidence to the human reviewer.
+Requirements: [Readiness and merge checks](../../../../docs/requirements/github.md#readiness-and-merge-checks).

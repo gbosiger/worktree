@@ -2,7 +2,7 @@
 {
   "id": "T-e769d578",
   "kind": "task",
-  "title": "Publish archive records and prepare safe PR cleanup",
+  "title": "Archive tickets before removing their files",
   "status": "backlog",
   "parent": "E-54e9139e",
   "depends_on": ["T-dc9a8fcd"],
@@ -12,32 +12,18 @@
   "base_branch": null
 }
 ---
-# Publish archive records and prepare safe PR cleanup
+# Archive tickets before removing their files
 
-## Purpose and scope
+Preserve every selected ticket before removing its file from a PR.
 
-Prepare durable records and eligible ticket-removal commits on the selected PR
-branch, with recoverable and idempotent GitHub archive comments.
+## Scope
+
+Start from the archive policy chosen in T-8818c75d. Prepare the scoped deletion on the PR branch only after the full record can be recovered. Demonstrate a retry after a comment was published but local cleanup failed, including what the maintainer sees on the second attempt.
 
 ## Acceptance criteria
 
-- [ ] Each selected task/story has a complete, attributed managed archive comment and the shared Git record; already archived files resolve through local history without duplicate deletion/archival.
-- [ ] Comments are idempotent per ticket/revision, preserve full content under the agreed size strategy, and never silently truncate or publish prohibited content.
-- [ ] Remove files only after archive verification; cleanup includes only eligible scoped ticket paths in the PR head and preserves unrelated local/index changes.
-- [ ] Epic cleanup archives the epic and collects all prior child records for the final squash message, including tasks merged earlier and no longer present as files.
-- [ ] Preview shows comments, records, removals, cleanup commits, and messages without writes. Authentication/network/comment-size/cleanup failures preserve content and distinguish completed from pending actions.
-- [ ] Tests cover comment-success/cleanup-failure retries, altered or missing records, oversized content, archived children, and cleanup-head changes requiring fresh checks/reviews.
+- [ ] The preview shows exactly which records will be published and which files will be removed.
+- [ ] A failed or oversized archive leaves the ticket recoverable.
+- [ ] Retrying after a comment succeeds resumes cleanup without duplicating the comment.
 
-## Approach and decisions
-
-Reuse the E-1a88a55f local archive codec/history lookup and safety contract. This task prepares
-cleanup; it does not merge or claim GitHub comments replace local Git durability.
-
-## Verification
-
-Use disposable branches and a fake GitHub adapter with injected partial failures.
-Verify complete record recovery and unchanged unrelated work.
-
-## Handoff
-
-Provide cleanup/retry evidence and recovery instructions to the human reviewer.
+Requirements: [Archive and cleanup](../../../../docs/requirements/github.md#archive-and-cleanup).

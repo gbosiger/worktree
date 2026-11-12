@@ -1,21 +1,11 @@
 # {{title}}
 
-## Shared outcome
+Describe the larger outcome and who depends on the member features working together.
 
-The capability or release scope these epics deliver together.
+## Integration scope
 
-## Scope and member epics
-
-Link epic IDs. Explain what is excluded.
+Explain what connects the epics, what each contributes, and where coordination or sequencing matters.
 
 ## Acceptance criteria
 
-- [ ] Replace with an observable integration outcome.
-
-## Integration strategy
-
-An integration branch is optional. If used, record branch and base_branch in metadata.
-
-## Decisions and handoff
-
-Integration evidence, owner, unresolved issues, and next action.
+- [ ] Describe how a reviewer can demonstrate the combined outcome.

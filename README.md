@@ -48,6 +48,10 @@ pinned copy—no global setup is needed for that local launcher.
 
 ## A small workflow
 
+Give each ticket a short outcome and observable checks. When pausing work,
+put the result, evidence, and next action in the ticket so a fresh session can
+pick it up. See [writing a ticket and handoff](docs/AUTHORING.md).
+
 Use the real IDs printed by `create` in place of the example IDs below:
 
 ```sh

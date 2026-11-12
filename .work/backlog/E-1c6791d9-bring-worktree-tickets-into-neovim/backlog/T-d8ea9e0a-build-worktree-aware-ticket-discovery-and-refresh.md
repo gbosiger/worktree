@@ -14,28 +14,16 @@
 ---
 # Build worktree-aware ticket discovery and refresh
 
-## Purpose and scope
+Give every editor view the same up-to-date list of tickets for its worktree.
 
-Provide the shared board model and asynchronous refresh used by all plugin views.
+## Scope
+
+Use the editor design to build the lookup and refresh interface used by the picker, tree, and completion. Resolve a board from the active buffer. Verify with two linked worktrees and a ticket moved externally while an old search is still open.
 
 ## Acceptance criteria
 
-- [ ] Discover the correct project board from the active buffer with documented explicit-root overrides; isolate multiple projects and Git worktrees.
-- [ ] Read current JSON-frontmatter Markdown records, including optional groups, without evaluating content; expose ID, title, kind, status, parent, path, and preview content.
-- [ ] Diagnose malformed/duplicate records and missing boards without crashing or hiding unrelated valid records.
-- [ ] Invalidate on relevant saves, external creates/edits/moves/removals, and successful plugin mutations; provide manual refresh and resolve moved paths by ID.
-- [ ] Fixture/headless tests demonstrate isolated caches, stale-result protection, external moves, and nonblocking scheduled updates using the design's responsiveness criteria.
+- [ ] Two buffers in different worktrees show their own tickets.
+- [ ] Edits and moves refresh the correct view without interrupting typing.
+- [ ] An invalid ticket produces a diagnostic while other results stay available.
 
-## Approach and decisions
-
-Implement the contract selected by T-5e7187d5. Do not add a persistent database or
-make undocumented CLI output an implicit machine protocol.
-
-## Verification
-
-Exercise two worktrees, nested groups, malformed files, rapid refreshes, and a
-ticket moved while selected. Record test commands and results.
-
-## Handoff
-
-Document model/refresh interfaces for completion, tree, and action consumers.
+Requirements: [Board discovery](../../../../docs/requirements/neovim.md#board-discovery).

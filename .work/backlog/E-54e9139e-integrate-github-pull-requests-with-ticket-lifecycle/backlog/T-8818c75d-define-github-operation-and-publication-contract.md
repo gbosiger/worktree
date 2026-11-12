@@ -2,7 +2,7 @@
 {
   "id": "T-8818c75d",
   "kind": "task",
-  "title": "Define GitHub operation and publication contract",
+  "title": "Agree on how GitHub publishes and preserves tickets",
   "status": "backlog",
   "parent": "E-54e9139e",
   "depends_on": ["E-1a88a55f"],
@@ -12,32 +12,22 @@
   "base_branch": null
 }
 ---
-# Define GitHub operation and publication contract
+# Agree on how GitHub publishes and preserves tickets
 
-## Purpose and scope
+Agree with the maintainer on how to publish tickets and keep their records recoverable after both GitHub merges.
 
-Settle the remote operation boundaries using the accepted local archive format.
-Keep GitHub optional; this preparation does not authorize any publication.
+## Scope
+
+Compare the current Git archive reader with the proposed two-level squash workflow. Deliver a decision note describing where records survive, which operations publish data, and which policies must be refused. Use one child merged early as the worked example for the human reviewer.
 
 ## Acceptance criteria
 
-- [ ] Specify CLI/shortcut names, authentication mechanism/minimum permissions, and exactly which explicit operations may push, comment, review, clean up, or merge.
-- [ ] Define repository/remote/default-branch discovery, task-to-epic targeting, grouped-epic behavior, and confirmation of ambiguous or unexpected targets; do not silently override existing branch policy.
-- [ ] Define managed section/comment markers, source revision attribution, AGENT labels, comment location, idempotency keys, and full-record size handling without truncation.
-- [ ] Resolve supported squash/merge-queue/auto-merge policies, required checks, cleanup/reapproval sequencing, and how archive-preserving messages are enforced or unsupported operations blocked.
-- [ ] Define public-content/secret review and a recoverable prohibited-content failure path before publication, without promising automatic secret detection.
-- [ ] Record approved decisions and remaining blockers in focused docs, reusing E-1a88a55f's local archive records rather than inventing a second format.
+- [ ] The agreed policy states which command writes what, under whose identity, and with which permissions.
+- [ ] The decision note records the merge policy chosen by the human reviewer. A fresh-clone example shows where to recover an earlier child after both merges.
+- [ ] The note specifies the PR destination for a grouped epic or explains when to refuse publication.
+- [ ] The note specifies which content must be withheld from publication.
+- [ ] The note specifies how to preserve an oversized ticket in full or stop before deleting it.
 
-## Approach and decisions
+If the reviewer defers a choice, record it alongside the affected child IDs and the work that must wait. Leave the corresponding criterion open until the policy is settled.
 
-The epic's human reviewer remains authoritative. Optional assigned-agent PR
-review is a separate capability, not permission to replace that human review.
-
-## Verification
-
-Walk through the epic scenario table and map each remote side effect to an
-authorization, preview, retry, and failure boundary.
-
-## Handoff
-
-Submit the bounded contract and unresolved decisions for human review before implementation.
+Requirements: [Publication decisions](../../../../docs/requirements/github.md#publication-decisions).

@@ -14,34 +14,16 @@
 ---
 # Run ticket actions safely from Neovim
 
-## Purpose and scope
+Let developers run ticket actions from the current buffer, tree, or picker.
 
-Expose explicit ticket commands and reusable handlers for tree bindings without
-reimplementing or bypassing toolkit lifecycle rules.
+## Scope
+
+Use the existing CLI for create, start, review, done, and reopen. The key decision is which board and ticket will receive the action. Test an open ticket with unsaved edits, a different ticket selected in the picker, and cancellation before a write.
 
 ## Acceptance criteria
 
-- [ ] Provide create, start, review, done, and reopen actions plus open/preview/copy-ID commands usable without Neo-tree; create validates the selected parent kind.
-- [ ] Commands without an explicit ID infer the target from the current ticket buffer's validated metadata and board membership. For example, done from an open review ticket uses that ticket's ID without asking the user to retype it, while preserving every completion gate.
-- [ ] Explicit IDs override buffer inference; actions invoked on a tree/picker entry use that entry, not the previously active ticket buffer. An ordinary source buffer or invalid/missing ticket identity requests selection or reports an actionable error, never silently uses the last ticket.
-- [ ] Resolve board and target together, including an explicit ID from another buffer context; reject ambiguous or invalid targets rather than acting in a different worktree. Tests cover ticket README buffers, moved files, malformed/edited identity, and explicit overrides.
-- [ ] Invoke the correct project CLI asynchronously with argument arrays, not shell interpolation; titles, evidence, spaces in paths, and shell metacharacters remain literal.
-- [ ] Prompt for required input, reviewer identity, and completion evidence; preserve CLI acceptance/dependency gates and surface actionable stderr and exit failures.
-- [ ] Resolve target IDs at execution time and explicitly save or cancel around affected unsaved buffers; never overwrite unsaved edits, auto-check acceptance items, or change another worktree.
-- [ ] Cancellation performs no mutation; successful moves reconcile open buffers and refresh consumers, while failures retain recoverable state and visible diagnostics.
-- [ ] Tests cover missing CLI, rejected transitions, unsaved edits, cancelled prompts, moved targets, malicious-looking arguments, and separate worktrees. No Git/publish actions are implicit.
+- [ ] Done from an open review ticket asks for reviewer and evidence and uses that ticket.
+- [ ] An explicit ID or selected entry targets the intended ticket in its own board.
+- [ ] Cancelling preserves unsaved edits. A rejected command explains what to fix.
 
-## Approach and decisions
-
-Follow docs/LIFECYCLE.md and the design's CLI-resolution policy. Expose handlers
-that the optional tree can bind without coupling standalone actions to Neo-tree.
-
-## Verification
-
-Use a fake process runner for argument/failure tests and temporary real boards
-for lifecycle integration, including completion denied by unchecked criteria.
-
-## Handoff
-
-Document commands, target precedence, prompts, buffer policy, and verified failure
-behavior. Include the open-review-ticket → done-without-ID workflow.
+Requirements: [Ticket actions](../../../../docs/requirements/neovim.md#ticket-actions).

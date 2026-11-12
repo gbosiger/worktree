@@ -1,21 +1,14 @@
 # {{title}}
 
-## Required behavior and value
+Describe who encounters this situation, what they need to do, and why it matters.
 
-Describe one bounded, verifiable increment and who benefits.
+## Behavior
+
+Walk through one realistic example from the starting condition to the visible result. State the rule for a meaningful exception if it changes what the user experiences.
 
 ## Acceptance criteria
 
-- [ ] Replace with a concrete observable result.
+- [ ] Describe what the user can observe after taking the action.
+- [ ] Describe a boundary outcome if it needs separate acceptance.
 
-## Approach and decisions
-
-Add a short plan immediately before implementation. Link code/docs rather than duplicate them.
-
-## Verification
-
-Commands run, outcomes, acceptance evidence, and any limitations.
-
-## Handoff
-
-What is ready, what remains, and who acts next.
+Put test variations that exercise the same outcome in a verification note.

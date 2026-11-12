@@ -88,6 +88,10 @@ Read the selected ticket, ancestor READMEs, explicit dependencies, and relevant
 code/docs, not the whole archive. Establish unset implementer/reviewer roles
 once with `assign`; honor agreed ownership without repeated questions.
 
+At a pause or change of owner, update the selected ticket using the
+[handoff example](AUTHORING.md#leave-a-handoff-when-there-is-work-to-resume).
+A returning assignee starts there.
+
 Implementation ends with evidence and a handoff into review. Review checks
 scope, acceptance criteria, tests, and documentation. Record limitations and
 return to WIP when needed. The reviewer can be another agent if agreed; separate

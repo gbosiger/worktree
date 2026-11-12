@@ -2,7 +2,7 @@
 {
   "id": "S-8ce9abfb",
   "kind": "story",
-  "title": "Allow explicitly confirmed acceptance directly from WIP",
+  "title": "Let a reviewer confirm acceptance from WIP",
   "status": "backlog",
   "parent": "E-f44b10c1",
   "depends_on": [],
@@ -12,54 +12,23 @@
   "base_branch": null
 }
 ---
-# Allow explicitly confirmed acceptance directly from WIP
+# Let a reviewer confirm acceptance from WIP
 
-## Required behavior and value
+An assigned reviewer may have finished a review task while the ticket itself is still in WIP. They need to see exactly which handoff they are skipping before accepting it.
 
-Allow an explicitly requested, confirmed `wip -> implemented` acceptance path.
-For example, a task whose purpose is to perform a review may already contain
-the completed review and a fully checked checklist while still in `wip/`.
-The user should be able to accept it without a separate move through `review/`,
-but never by default or merely because all boxes are checked. Here “review task”
-describes the ticket's purpose, not its current lifecycle status.
+## Behavior
+
+When the reviewer opts in, show the target and ask for confirmation. On confirmation, recheck eligibility, record evidence, and move the ticket to implemented. If the ticket changed while waiting for input, its earlier eligibility cannot authorize the move. The opt-in waives only the review-state requirement.
 
 ## Acceptance criteria
 
-- [ ] An explicit opt-in lets an otherwise eligible WIP ticket be accepted into implemented, not done, without first moving it to review.
-- [ ] Without opt-in, accepting WIP remains rejected with guidance toward the normal review flow or the explicit shortcut; checking boxes alone never triggers a transition.
-- [ ] Before mutation, show a warning naming the ticket and the skipped review-state handoff, and require affirmative confirmation. Decline, empty input, EOF, or cancellation leaves the ticket unchanged.
-- [ ] Retain checked-checklist, recorded-reviewer, matching `--by`, nonempty evidence, dependency, and completed-child gates. Confirmation waives only the requirement to be in review status.
-- [ ] Record ordinary timestamped acceptance evidence. If state-history logging is available, record the actual WIP-to-implemented transition without inventing a visit to review.
-- [ ] Noninteractive use cannot silently confirm or hang waiting for input. Decide and document whether it is refused or requires a separately explicit acknowledgement; no general default-yes behavior.
-- [ ] Dry runs describe the exception and remaining confirmation requirement without changing status, acceptance records, or history.
-- [ ] Bash completion keeps WIP IDs out of ordinary `done` suggestions; include them only in the chosen explicit opt-in context, with normal command-time validation unchanged.
-- [ ] Regression tests cover confirmed success, default refusal, decline/cancel/EOF, noninteractive behavior, dry runs, every retained acceptance gate, and unchanged normal review acceptance.
-- [ ] Lifecycle/help documentation explains the exception and warns that agent workflows still require explicit authorization to review/accept; opt-in is not permission to invent reviewer approval.
+- [ ] Ordinary acceptance refuses WIP. Opting in names the ticket and asks for confirmation.
+- [ ] Declining or cancelling leaves the ticket unchanged.
+- [ ] Missing evidence or a mismatched reviewer still blocks acceptance after confirmation.
+- [ ] A successful confirmation records the move from WIP directly to implemented.
 
-## Approach and decisions
-
-Choose the opt-in spelling and confirmation interface before implementation;
-no particular flag is specified yet. Inspect `transition()` and argument parsing
-in `.work/tools/work.py`, `docs/LIFECYCLE.md`, and acceptance/archive validation.
-Keep this a narrow status-gate exception rather than a force command bypassing
-validation. Confirm which ticket kinds may use it; the motivating case is a
-review-purpose task, but there is no existing dedicated review ticket kind.
-
-Coordinate the candidate matrix with S-5299cba3 and history semantics with
-T-f7d4aef3/S-56c90e4f. No hard dependency on history recording is required; the
-combined epic must cover the exception once logging is present. Resolve lock
-handling and revalidation around user input so confirmation does not authorize
-acceptance of a ticket that changed meanwhile.
-
-## Verification
-
-Use disposable boards and scripted terminal/nonterminal input. Verify rejected
-or cancelled attempts leave all files unchanged, and accepted records still pass
-board/archive validation. Run the unit suite and board check; collect a short
-manual warning/confirmation transcript without claiming reviewer approval.
+Requirements: [Direct acceptance from WIP](../../../../docs/requirements/terminal.md#direct-acceptance-from-wip).
 
 ## Handoff
 
-Backlog specification only. Resolve interface, ticket-kind scope, and
-noninteractive policy under the epic's branch/base and role preflight before
-implementation. Normal agent review/acceptance authorization rules remain intact.
+Decide eligible ticket kinds and noninteractive confirmation before implementing the shortcut.
